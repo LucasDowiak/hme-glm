@@ -127,7 +127,7 @@ inter_node_paths <- function(geezer, youngin, gate_prob)
   a2 <- unlist(ancestors(youngin))
   if (!geezer %in% a2) {
     stext <- "Node1 [%s] must be an ancestor of node2 [%s]."
-    stop(sprintf(stext, node1, node2))
+    stop(sprintf(stext, a1, a2))
   }
   return(gate_path_values(setdiff(a2, a1), gate_prob))
 }
@@ -245,10 +245,10 @@ joint_posterior_weight <- function(node, post_weights, root_prior)
 #' @param densities he list containing the density values for all experts in
 #' the tree
 #' 
-#' @param gate_probs The list containing all the current split probabilities for
+#' @param gate_prob The list containing all the current split probabilities for
 #' every gating node in the tree
 #' 
-expert_lik_contr <- function(experts, densities, gate_probs)
+expert_lik_contr <- function(experts, densities, gate_prob)
 {
   # prior weights for descendants experts
   Pi <- napply(experts, prior_weights, gate_prob)

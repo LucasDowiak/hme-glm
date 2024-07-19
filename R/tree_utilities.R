@@ -212,7 +212,7 @@ all_but_last_split <- function(d)
 
 #' Given a list of nodes return identify which ones are expert nodes
 #' 
-#' @param d A list or character vector of nodes in the tree
+#' @param d A list or character vector of all nodes in the tree
 #' 
 #' @return Given a node and its address return the direction of the last split
 #' 
@@ -222,7 +222,7 @@ expert_index <- function(d)
 {
   idx <- unlist(is_terminal(d, d))
   idx[idx] <- seq_len(sum(idx))
-  names(idx) <- nodes
+  names(idx) <- d
   return(idx)
 }
 

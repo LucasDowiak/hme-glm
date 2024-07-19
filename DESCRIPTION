@@ -1,9 +1,10 @@
-
 Package: hmeglm
 Type: Package
 Title: Hierarchical Mixture-of-Experts
-Authors@R: person("Lucas", "Dowiak", email="lcdowi@gmail.com", role=c("aut", "cre"))
+Authors@R:
+    person("Lucas", "Dowiak", email="lcdowi@gmail.com", role=c("aut", "cre"))
 Version: 0.0.0.1
-Description: An R implementation of the hierarchical mixture of experts model proposed by Jordan and Jacobs
-License: GPL-3
-LazyData: true
+Description: An R implementation of the hierarchical mixture-of-experts model proposed by Jordan and Jacobs.
+License: MIT + file LICENSE
+Imports:
+    methods
