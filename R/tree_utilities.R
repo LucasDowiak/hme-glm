@@ -9,6 +9,8 @@
 #' @return A list, one entry for each element of \code{d}, containing the children
 #' of node \code{d}. For a terminal node the return value is \code{NULL}
 #' 
+#' @importFrom methods is
+#' 
 #' @export
 #' 
 children <- function(d, nodes)
@@ -62,8 +64,6 @@ parent <- function(d, nodes)
 #' Find all ancestors of a given set of nodes
 #' 
 #' @param d A list or character vector of nodes in the tree
-#' 
-#' @param nodes A list containing all nodes in the tree
 #' 
 #' @return A list, one entry for each element of \code{d}, providing the ancestry
 #' of each node in \code{d} back to the root node. For the root node the return

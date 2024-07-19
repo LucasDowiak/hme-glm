@@ -64,6 +64,8 @@ par_to_gate_paths <- function(node, gate_par_list, X)
 #' 
 #' @return A matrix of multinomial probabilities for node \code{d}
 #' 
+#' @importFrom stats dnorm
+#' 
 par_to_expert_dens <- function(node, expert_type, expert_par_list, Y, X, ...)
 {
   if (expert_type == "gaussian") {
@@ -285,6 +287,8 @@ log_likelihood <- function(treestr, gate_prob, densities)
 #' @param tree A list of the entire tree structure
 #' 
 #' @param n The number of parameters to provide initial values
+#' 
+#' @importFrom stats runif
 #' 
 init_gate_node_pars <- function(node, tree, n)
 {
