@@ -29,7 +29,7 @@ children <- function(d, nodes)
       return(o)
     }
   }
-  lapply(d, f_)
+  napply(d, f_)
 }
 
 
@@ -57,7 +57,7 @@ parent <- function(d, nodes)
       return(regmatches(x, regexpr(".*(?=\\.)", x, perl=TRUE)))
     }
   } 
-  lapply(d, f_)
+  napply(d, f_)
 }
 
 
@@ -88,7 +88,7 @@ ancestors <- function(d)
       return(Reduce(f_, unlist(strsplit(y, "\\.")), accumulate=T))
     }
   }
-  lapply(d, fetch_history)
+  napply(d, fetch_history)
 }
 
 
@@ -124,10 +124,10 @@ progeny <- function(d, nodes)
     if (is(node_well, "NULL")) {
       return(NULL)
     } else {
-      return(sort(node_well))
+      return(sort(unname(node_well)))
     }
   }
-  lapply(d, f_)
+  napply(d, f_)
 }
 
 
@@ -154,7 +154,7 @@ is_terminal <- function(d, nodes)
       bool <- TRUE
     return(bool)
   }
-  lapply(d, f_)
+  napply(d, f_)
 }
 
 
@@ -180,7 +180,7 @@ last_split <- function(d)
       return(o[length(o)])
     }
   }
-  lapply(d, f_)
+  napply(d, f_)
 }
 
 
@@ -206,7 +206,7 @@ all_but_last_split <- function(d)
       return(paste0(o[-length(o)], collapse="."))
     }
   }
-  lapply(d, f_)
+  napply(d, f_)
 }
 
 
@@ -214,7 +214,7 @@ all_but_last_split <- function(d)
 #' 
 #' @param d A list or character vector of all nodes in the tree
 #' 
-#' @return Given a node and its address return the direction of the last split
+#' @return A named integer vector identifying the experts by order of their appearance
 #' 
 #' @export
 #' 
