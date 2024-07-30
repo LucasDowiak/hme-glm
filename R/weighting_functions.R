@@ -66,20 +66,18 @@ par_to_gate_paths <- function(node, gate_par_list, X)
 #' 
 #' @importFrom stats dnorm
 #' 
-par_to_expert_dens <- function(node, expert_type, expert_par_list, weights, Y, X, ...)
+par_to_expert_dens <- function(expert, expert_type, expert_par_list, weights, Y, X, ...)
 {
   if (expert_type == "gaussian") {
-    wts <- gate_path_product("0", node, gate_prob=weights)
-    beta <- expert_par_list[[node]]
+    wts <- prior_weights(expert, weights)
+    beta <- expert_par_list[[expert]]
     mu <- X %*% beta
     df.r <- length(Y) - length(beta)
+    # deviance <- gaussian()$dev.resids(Y, mu, wt)
     variance <- sum(wts * (Y - mu)**2) / df.r
     return(dnorm(Y, mean=mu, sd=sqrt(variance), ...))
   } else if (expert_type == "bernoulli") {
-    # if Y is a bernoulli variable {1, 0}
-    g <- par_to_gate_paths(node, expert_par_list, X)
-    # pmax(g[,1] * Y, g[,2] * (1 - Y))
-    g[,1] * Y + g[,2] * (1 - Y)
+    stop("Bernoulli not implemented")
   }
 }
 
@@ -136,7 +134,6 @@ inter_node_paths <- function(geezer, youngin, gate_prob)
 }
 
 
-
 #' Find the cumulative product path from an arbitrary gating node to one of its
 #' progeny
 #' 
@@ -152,7 +149,6 @@ gate_path_product <- function(geezer, youngin, gate_prob)
   inp <- inter_node_paths(geezer, youngin, gate_prob)
   Reduce(`*`, inp)
 }
-
 
 
 #' Calculate the prior weight for a gating node
