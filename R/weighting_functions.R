@@ -66,13 +66,14 @@ par_to_gate_paths <- function(node, gate_par_list, X)
 #' 
 #' @importFrom stats dnorm
 #' 
-par_to_expert_dens <- function(node, expert_type, expert_par_list, Y, X, ...)
+par_to_expert_dens <- function(node, expert_type, expert_par_list, weights, Y, X, ...)
 {
   if (expert_type == "gaussian") {
-    parm <- expert_par_list[[node]]
-    beta <- parm[1:(length(parm) - 1)]
-    variance <- exp(parm[length(parm)])
+    wts <- gate_path_product("0", node, gate_prob=weights)
+    beta <- expert_par_list[[node]]
     mu <- X %*% beta
+    df.r <- length(Y) - length(beta)
+    variance <- sum(wts * (Y - mu)**2) / df.r
     return(dnorm(Y, mean=mu, sd=sqrt(variance), ...))
   } else if (expert_type == "bernoulli") {
     # if Y is a bernoulli variable {1, 0}
@@ -275,7 +276,8 @@ expert_lik_contr <- function(experts, densities, gate_prob)
 log_likelihood <- function(treestr, gate_prob, densities)
 {
   expert.nodes <- treestr[unlist(is_terminal(treestr, treestr))]
-  S <- simplify2array(expert_lik_contr(expert.nodes, densities, gate_prob))
+  lik_contr <- expert_lik_contr(expert.nodes, densities, gate_prob)
+  S <- simplify2array(lik_contr)
   sum(S)
 }
 
