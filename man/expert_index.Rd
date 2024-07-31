@@ -10,7 +10,7 @@ expert_index(d)
 \item{d}{A list or character vector of all nodes in the tree}
 }
 \value{
-Given a node and its address return the direction of the last split
+A named integer vector identifying the experts by order of their appearance
 }
 \description{
 Given a list of nodes return identify which ones are expert nodes

@@ -5,11 +5,9 @@
 \title{Calculate the implied density of the observations for an arbitrary expert
 given the data and set of regression parameters}
 \usage{
-par_to_expert_dens(node, expert_type, expert_par_list, Y, X, ...)
+par_to_expert_dens(expert, expert_type, expert_par_list, weights, Y, X, ...)
 }
 \arguments{
-\item{node}{The address of the expert node as a character}
-
 \item{expert_type}{A character string specifying the type of expert}
 
 \item{expert_par_list}{A list containing the parameters of the expert nodes}
@@ -19,6 +17,8 @@ par_to_expert_dens(node, expert_type, expert_par_list, Y, X, ...)
 \item{X}{The design matrix of the expert regressions}
 
 \item{...}{Additional options to pass to the family of d*() functions}
+
+\item{node}{The address of the expert node as a character}
 }
 \value{
 A matrix of multinomial probabilities for node \code{d}
