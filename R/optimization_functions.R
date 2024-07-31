@@ -7,8 +7,6 @@
 #' 
 #' @param ... Values to pass to glm()
 #' 
-#' @importFrom stats qr.lm
-#' 
 bootstrap_glm <- function(n=2, ...)
 {
   object <- glm(...)
@@ -62,8 +60,6 @@ bootstrap_glm <- function(n=2, ...)
 #' 
 #' @param gat.pars A list (of lists) of parameter vectors for each gating node
 #' 
-#' @importFrom stats qr.lm
-#'
 em_algo <- function(tree, expert_type, posteriors, Y, X, Z,
                     exp.pars, gat.pars, root_prior)
 {
