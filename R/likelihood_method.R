@@ -25,8 +25,6 @@ expert_lik_contr <- function(experts, densities, weights)
 #'
 #' @param obj An S3 object of class "hme"
 #' 
-#' @importFrom base simplify2array
-#' 
 #' @export
 #' 
 logLik.hme <- function(obj)
