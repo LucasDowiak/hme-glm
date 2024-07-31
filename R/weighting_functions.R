@@ -208,10 +208,6 @@ posterior_weights <- function(node, treestr, gate_prob, densities)
 }
 
 
-"Calculate the joint posterior weight for a gating node (weight for the glm)
-
- Output:
-       the cumulative product of posterior weights from the root to `node`"
 #' Cumulative product of posterior weights from the root to an arbitrary node
 #' 
 #' @param node An arbitrary node. Can be either a gating node or an expert
@@ -234,47 +230,6 @@ joint_posterior_weight <- function(node, post_weights, root_prior)
       return(root_prior)
   }
   return(root_prior * gate_path_product("0", node, post_weights))
-}
-
-
-#' Calculate the likelihood contribution for a set of experts
-#' 
-#' @param experts A character vector of expert node names
-#' 
-#' @param densities he list containing the density values for all experts in
-#' the tree
-#' 
-#' @param gate_prob The list containing all the current split probabilities for
-#' every gating node in the tree
-#' 
-expert_lik_contr <- function(experts, densities, gate_prob)
-{
-  # prior weights for descendants experts
-  Pi <- napply(experts, prior_weights, gate_prob)
-  # prior *  P^{k}
-  return(napply(experts, function(x) Pi[[x]] * densities[[x]]))
-}
-
-
-#' Calculates the matrix of log-likelihood contributions for all experts in the
-#' tree
-#' 
-#' @param treestr A list of the entire tree structure
-#' 
-#' @param gate_prob The list containing all the current prior split probabilities
-#' for every gating node in the tree
-#' 
-#' @param densities The list containing the density values for all experts in
-#' the tree
-#' 
-#' @return The log-likelihood of the model
-#' 
-log_likelihood <- function(treestr, gate_prob, densities)
-{
-  expert.nodes <- treestr[unlist(is_terminal(treestr, treestr))]
-  lik_contr <- expert_lik_contr(expert.nodes, densities, gate_prob)
-  S <- simplify2array(lik_contr)
-  sum(S)
 }
 
 
