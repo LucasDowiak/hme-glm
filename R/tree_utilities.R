@@ -11,8 +11,6 @@
 #' 
 #' @importFrom methods is
 #' 
-#' @export
-#' 
 children <- function(d, nodes)
 {
   if (!is(d, "list"))
@@ -42,8 +40,6 @@ children <- function(d, nodes)
 #' @return A list, one entry for each element of \code{d}, containing the parent
 #' of node \code{d}. For the root node the return value is \code{NULL}
 #' 
-#' @export
-#' 
 parent <- function(d, nodes)
 {
   if (!is(d, "list"))
@@ -68,8 +64,6 @@ parent <- function(d, nodes)
 #' @return A list, one entry for each element of \code{d}, providing the ancestry
 #' of each node in \code{d} back to the root node. For the root node the return
 #' value is \code{NULL}
-#' 
-#' @export
 #' 
 ancestors <- function(d)
 {
@@ -101,8 +95,6 @@ ancestors <- function(d)
 #' @return A list, one entry for each element of \code{d}, providing the ancestry
 #' of each node in \code{d} back to the root node. For the root node the return
 #' value is \code{NULL}
-#' 
-#' @export
 #' 
 progeny <- function(d, nodes)
 {
@@ -140,8 +132,6 @@ progeny <- function(d, nodes)
 #' @return A list of Boolean values, one entry for each element of \code{d},
 #' testing if each element of \code{d} is an expert node
 #' 
-#' @export
-#' 
 is_terminal <- function(d, nodes)
 {
   if(!is(d, "list"))
@@ -163,8 +153,6 @@ is_terminal <- function(d, nodes)
 #' @param d A list or character vector of nodes in the tree
 #' 
 #' @return A list
-#' 
-#' @export
 #' 
 last_split <- function(d)
 {
@@ -190,8 +178,6 @@ last_split <- function(d)
 #' 
 #' @return A list
 #' 
-#' @export
-#' 
 all_but_last_split <- function(d)
 {
   if(!is(d, "list"))
@@ -215,8 +201,6 @@ all_but_last_split <- function(d)
 #' @param d A list or character vector of all nodes in the tree
 #' 
 #' @return A named integer vector identifying the experts by order of their appearance
-#' 
-#' @export
 #' 
 expert_index <- function(d)
 {
