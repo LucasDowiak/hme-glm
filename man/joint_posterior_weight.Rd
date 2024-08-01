@@ -4,15 +4,13 @@
 \alias{joint_posterior_weight}
 \title{Cumulative product of posterior weights from the root to an arbitrary node}
 \usage{
-joint_posterior_weight(node, post_weights, root_prior)
+joint_posterior_weight(node, post_weights)
 }
 \arguments{
 \item{node}{An arbitrary node. Can be either a gating node or an expert}
 
 \item{post_weights}{The list containing all the posterior split probabilities
 for every gating node in the tree}
-
-\item{root_prior}{Weight from the branch of the parent node}
 }
 \description{
 Cumulative product of posterior weights from the root to an arbitrary node

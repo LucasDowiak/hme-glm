@@ -61,14 +61,14 @@ bootstrap_glm <- function(n=2, ...)
 #' @param gat.pars A list (of lists) of parameter vectors for each gating node
 #' 
 em_algo <- function(tree, expert_type, posteriors, Y, X, Z,
-                    exp.pars, gat.pars, root_prior)
+                    exp.pars, gat.pars)
 {
   gat.out <- lapply(gat.pars, function(x) list())
   exp.out <- lapply(exp.pars, function(x) list())
   
   # M-step for the expert regressions
   for (e in names(exp.pars)) {
-    jpw <- joint_posterior_weight(e, posteriors, root_prior)
+    jpw <- joint_posterior_weight(e, posteriors)
     opt_blk <- optimize_block(Y, X, jpw, expert_type)
     exp.out[[e]] <- opt_blk$coefficients
   }
@@ -81,7 +81,7 @@ em_algo <- function(tree, expert_type, posteriors, Y, X, Z,
     if (nchds == 2)
       node_type <- "binomial"
     # joint posterior weights
-    wt <- joint_posterior_weight(g, posteriors, root_prior)
+    wt <- joint_posterior_weight(g, posteriors)
     # posterior branches
     target <- posteriors[[g]]
     wts=list(branch=target, joint_post=wt)

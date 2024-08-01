@@ -15,8 +15,6 @@
 #' 
 #' @param holdout An optional holdout set to track the mean squared error
 #' 
-#' @param root_prior deprecated 
-#' 
 #' @param init_gate_pars A list (of lists) containing starting values for the gating parameters
 #' 
 #' @param init_expert_pars A list containing starting values for the expert regressions
@@ -34,7 +32,7 @@
 #' @export
 #' 
 hme <- function(tree, formula, data, family=gaussian(), holdout=NULL,
-                root_prior=1, init_gate_pars=NULL, init_expert_pars=NULL,
+                init_gate_pars=NULL, init_expert_pars=NULL,
                 maxiter=100, tolerance=1e-4, trace=0)
 {
   cl <- match.call()
@@ -111,8 +109,7 @@ hme <- function(tree, formula, data, family=gaussian(), holdout=NULL,
   for (ii in seq_len(maxiter)) {
     oldLL <- newLL
     mstep <- em_algo(tree, expert_type, old_posteriors,
-                     Y=Y, X=X, Z=Z, exp.pars=expert.pars, gat.pars=gate.pars,
-                     root_prior=root_prior)
+                     Y=Y, X=X, Z=Z, exp.pars=expert.pars, gat.pars=gate.pars)
     expert.pars <- mstep[["exp.pars"]]
     gate.pars <- mstep[["gat.pars"]]
     newLL <- mstep[["loglik"]] / length(Y)

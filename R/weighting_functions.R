@@ -215,21 +215,9 @@ posterior_weights <- function(node, treestr, gate_prob, densities)
 #' @param post_weights The list containing all the posterior split probabilities
 #' for every gating node in the tree
 #' 
-#' @param root_prior Weight from the branch of the parent node
-#' 
-joint_posterior_weight <- function(node, post_weights, root_prior)
+joint_posterior_weight <- function(node, post_weights)
 {
-  # not feasible for the root node
-  lrp <- length(root_prior)
-  nlp <- nrow(post_weights[[1]])
-  stopifnot(lrp == 1 || lrp == nlp)
-  if (node == "0") {
-    if (lrp == 1)
-      return(rep(1, nlp))
-    else
-      return(root_prior)
-  }
-  return(root_prior * gate_path_product("0", node, post_weights))
+  return(gate_path_product("0", node, post_weights))
 }
 
 

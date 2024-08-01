@@ -4,7 +4,7 @@
 \alias{em_algo}
 \title{The EM Algorithm}
 \usage{
-em_algo(tree, expert_type, posteriors, Y, X, Z, exp.pars, gat.pars, root_prior)
+em_algo(tree, expert_type, posteriors, Y, X, Z, exp.pars, gat.pars)
 }
 \arguments{
 \item{tree}{The tree structure of the HME}

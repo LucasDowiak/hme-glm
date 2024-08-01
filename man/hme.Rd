@@ -10,7 +10,6 @@ hme(
   data,
   family = gaussian(),
   holdout = NULL,
-  root_prior = 1,
   init_gate_pars = NULL,
   init_expert_pars = NULL,
   maxiter = 100,
@@ -31,8 +30,6 @@ the gating network.}
 \item{family}{The family of glm to use in the expert regressions}
 
 \item{holdout}{An optional holdout set to track the mean squared error}
-
-\item{root_prior}{deprecated}
 
 \item{init_gate_pars}{A list (of lists) containing starting values for the gating parameters}
 
