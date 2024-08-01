@@ -68,7 +68,7 @@ em_algo <- function(tree, expert_type, posteriors, Y, X, Z,
   
   # M-step for the expert regressions
   for (e in names(exp.pars)) {
-    jpw <- joint_posterior_weight(e, posteriors)
+    jpw <- root_to_node_weight(e, posteriors)
     opt_blk <- optimize_block(Y, X, jpw, expert_type)
     exp.out[[e]] <- opt_blk$coefficients
   }
@@ -81,7 +81,7 @@ em_algo <- function(tree, expert_type, posteriors, Y, X, Z,
     if (nchds == 2)
       node_type <- "binomial"
     # joint posterior weights
-    wt <- joint_posterior_weight(g, posteriors)
+    wt <- root_to_node_weight(g, posteriors)
     # posterior branches
     target <- posteriors[[g]]
     wts=list(branch=target, joint_post=wt)
@@ -323,7 +323,7 @@ logistic_score <- function(node, gate_probs, densities, Z)
 glm_score <- function(expert, expert.pars, family, gate_probs, densities, Y, X)
 {
   # extract the variables for the expert and calculate error terms
-  wts <- prior_weights(expert, gate_probs)
+  wts <- root_to_node_weight(expert, gate_probs)
   beta <- expert.pars[[expert]]
   eta <- X %*% beta
   mu <- family$linkinv(eta)

@@ -69,7 +69,7 @@ par_to_gate_paths <- function(node, gate_par_list, X)
 par_to_expert_dens <- function(expert, expert_type, expert_par_list, weights, Y, X, ...)
 {
   if (expert_type == "gaussian") {
-    wts <- prior_weights(expert, weights)
+    wts <- root_to_node_weight(expert, weights)
     beta <- expert_par_list[[expert]]
     mu <- X %*% beta
     df.r <- length(Y) - length(beta)
@@ -151,7 +151,9 @@ gate_path_product <- function(geezer, youngin, gate_prob)
 }
 
 
-#' Calculate the prior weight for a gating node
+#' Calculate the cumulative weight
+#' 
+#' Calculate the cumulative product from the root node to an arbitrary node
 #' 
 #' @param node An arbitrary node in the tree. Can be a gating node or an expert
 #' node
@@ -159,7 +161,7 @@ gate_path_product <- function(geezer, youngin, gate_prob)
 #' @param gate_prob The list containing all the current split probabilities for
 #' every gating node in the tree
 #' 
-prior_weights <- function(node, gate_prob)
+root_to_node_weight <- function(node, gate_prob)
 {
   # prior weights go from root node down
   gate_path_product("0", node, gate_prob)
@@ -205,19 +207,6 @@ posterior_weights <- function(node, treestr, gate_prob, densities)
   }
   HH <- matrix(unlist(lapply(childs, g_)), ncol=length(childs))
   sweep(HH, 1, rowSums(HH), `/`)
-}
-
-
-#' Cumulative product of posterior weights from the root to an arbitrary node
-#' 
-#' @param node An arbitrary node. Can be either a gating node or an expert
-#' 
-#' @param post_weights The list containing all the posterior split probabilities
-#' for every gating node in the tree
-#' 
-joint_posterior_weight <- function(node, post_weights)
-{
-  return(gate_path_product("0", node, post_weights))
 }
 
 

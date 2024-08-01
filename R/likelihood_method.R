@@ -10,8 +10,8 @@
 #'
 expert_lik_contr <- function(experts, densities, weights)
 {
-  # prior weights for descendants experts
-  Pi <- napply(experts, prior_weights, weights)
+  # weights for descendants experts
+  Pi <- napply(experts, root_to_node_weight, weights)
   # prior *  P^{k}
   return(napply(experts, function(x) Pi[[x]] * densities[[x]]))
 }
