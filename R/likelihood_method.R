@@ -8,12 +8,14 @@
 #' @param weights A list containing all the current split probabilities for
 #' every gating node in the tree
 #'
-expert_lik_contr <- function(experts, densities, weights)
+weighted_densities <- function(experts, densities, weights)
 {
   # weights for descendants experts
   Pi <- napply(experts, root_to_node_weight, weights)
-  # prior *  P^{k}
-  return(napply(experts, function(x) Pi[[x]] * densities[[x]]))
+  # prior *  p^{k}
+  contr <- napply(experts, function(x) Pi[[x]] * densities[[x]])
+  # return as matrix
+  return(simplify2array(contr, higher=FALSE))
 }
 
 
@@ -29,16 +31,16 @@ expert_lik_contr <- function(experts, densities, weights)
 #' 
 logLik.hme <- function(obj)
 {
-  GD1 <- expert_lik_contr(obj$expert.nms, obj$list_density, obj$list_priors)
-  sum(simplify2array(GD1))
+  L <- weighted_densities(obj$expert.nms, obj$list_density, obj$list_priors)
+  return(sum(log(rowSums(L))))
 }
 
 
 
 #' Likelihood contributions
 #' 
-#' Calculates the matrix of likelihood contributions for all experts in the tree.
-#' Used internally
+#' Used internally. Calculates the matrix of likelihood contributions for all
+#' experts in the tree.
 #' 
 #' @param treestr A list of the entire tree structure
 #' 
@@ -53,9 +55,8 @@ logLik.hme <- function(obj)
 log_likelihood <- function(treestr, gate_prob, densities)
 {
   expert.nodes <- treestr[unlist(is_terminal(treestr, treestr))]
-  lik_contr <- expert_lik_contr(expert.nodes, densities, gate_prob)
-  S <- simplify2array(lik_contr)
-  sum(S)
+  L <- weighted_densities(expert.nodes, densities, gate_prob)
+  return(sum(log(rowSums(L))))
 }
 
 

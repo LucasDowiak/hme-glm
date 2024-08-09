@@ -224,7 +224,7 @@ irls_multinomial <- function(X, H, w=NULL, maxit=25, tol=1e-08)
 #' @param gate_probs The list containing all the current prior split probabilities
 #' for every gating node in the tree
 #' 
-#' @param GD The list of likelihood contributions for all experts
+#' @param GD The matrix of likelihood contributions for all experts
 #' 
 Omega_0 <- function(node, gate_probs, GD)
 {
@@ -234,8 +234,8 @@ Omega_0 <- function(node, gate_probs, GD)
   split_nms <- paste(node, seq_len(splits), sep="|")
   
   # Find experts that are descendants from the gating node
-  all_experts <- names(GD)
-  tree <- c(names(gate_probs), names(GD))
+  all_experts <- colnames(GD)
+  tree <- c(names(gate_probs), all_experts)
   node_progeny <- unlist(progeny(node, tree))
   node_experts <- intersect(all_experts, node_progeny)
   
@@ -247,7 +247,7 @@ Omega_0 <- function(node, gate_probs, GD)
     impl_experts <- setdiff(node_experts, expl_experts)
     
     # value for explicit experts
-    expl_omega_0 <- (1 - g[, i]) * Reduce(`+`, GD[expl_experts])
+    expl_omega_0 <- (1 - g[, i]) * rowSums(GD[, expl_experts, drop=FALSE])
     
     # All other splits need to be considered
     impl_omega_0 <- vector("list", ncol(g))
@@ -257,7 +257,7 @@ Omega_0 <- function(node, gate_probs, GD)
         impl_omega_0[[t]] <- rep(0, length(GD[[1]]))
       } else {
         impl_experts2 <- impl_experts[grepl(paste(node, t, sep="."), impl_experts)]
-        impl_omega_0[[t]] <- g[, t] * Reduce(`+`, GD[impl_experts2])
+        impl_omega_0[[t]] <- g[, t] * rowSums(GD[, impl_experts2, drop=FALSE])
       }
     }
     impl_omega_0 <- Reduce(`+`, impl_omega_0)
@@ -291,8 +291,8 @@ logistic_score <- function(node, gate_probs, densities, Z)
   all_experts <- names(densities)
   
   # Each experts contribution to the likelihood
-  GD <- expert_lik_contr(all_experts, densities, gate_probs)
-  denom <- Reduce(`+`, GD)
+  GD <- weighted_densities(all_experts, densities, gate_probs)
+  denom <- rowSums(GD)
   
   omega_0 <- Omega_0(node, gate_probs, GD)
   out <- lapply(omega_0, function(x) sweep(Z, 1, x / denom, FUN = `*`))
@@ -341,8 +341,8 @@ glm_score <- function(expert, expert.pars, family, gate_probs, densities, Y, X)
   
   # Calculate the relative (prior) weight of this expert against other experts
   all_experts <- names(densities)
-  GD <- expert_lik_contr(all_experts, densities, gate_probs)
-  expert_lik_prop <- GD[[expert]] / Reduce(`+`, GD)
+  GD <- weighted_densities(all_experts, densities, gate_probs)
+  expert_lik_prop <- GD[, expert] / rowSums(GD)
   score <- sweep(X, 1, as.array(expert_lik_prop * glm_score_constant), `*`)
   
   return(score)
@@ -362,13 +362,13 @@ cross_logistic_hessian <- function(node1, node2, list_priors, list_density, Z)
   
   # expert names
   all_experts <- names(list_density)
-  GD <- expert_lik_contr(all_experts, list_density, list_priors)
-  denom <- Reduce(`+`, GD)
+  GD <- weighted_densities(all_experts, list_density, list_priors)
+  denom <- rowSums(GD)
   omega_01 <- Omega_0(node1, list_priors, GD)
   omega_02 <- Omega_0(node2, list_priors, GD)
   
   # Find experts that are descendants from nodes 1 and 2
-  tree <- c(names(list_priors), names(GD))
+  tree <- c(names(list_priors), colnames(GD))
   node1_progeny <- unlist(progeny(node1, tree))
   node1_experts <- intersect(all_experts, node1_progeny)
   node2_progeny <- unlist(progeny(node2, tree))
@@ -408,10 +408,10 @@ cross_logistic_hessian <- function(node1, node2, list_priors, list_density, Z)
           is_explicit_2j <- as.integer(grepl(split_nm_perd_2, expert))
           omega_1 <- omega_1 + prod(is_explicit_1i - g1[t, as.integer(ns1[2])],
                                     is_explicit_2j - g2[t, as.integer(ns2[2])],
-                                    GD[[expert]][t])
+                                    GD[t, expert])
           if (ns1[1] == ns2[1]) {
             same_split <- as.integer(ns1[2] == ns2[2])
-            omega_2 <- omega_2 - g1[t, as.integer(ns1[2])] * (same_split - g2[t, as.integer(ns2[2])]) * GD[[expert]][t]
+            omega_2 <- omega_2 - g1[t, as.integer(ns1[2])] * (same_split - g2[t, as.integer(ns2[2])]) * GD[t, expert]
           }
         }
         partial_term <- omega_1 + omega_2

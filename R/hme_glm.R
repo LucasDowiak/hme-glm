@@ -7,11 +7,11 @@
 #' @param formula A formula object in R describing the expert and network regressions.
 #' The general structure is "y ~ x | z" where 'y' is the dependent variable, 'x'
 #' the set of explanatory variables in the experts and 'z' is the set of variables
-#' the gating network.
+#' in the gating network.
 #' 
 #' @param data The data.frame containing the variables y, x, and z
 #' 
-#' @param family The family of glm to use in the expert regressions
+#' @param family The glm family to use in the expert regressions
 #' 
 #' @param holdout An optional holdout set to track the mean squared error
 #' 
