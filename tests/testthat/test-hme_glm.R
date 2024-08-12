@@ -1,4 +1,4 @@
-test_that("Iris Two-Expert MoE: expect S3 object",
+test_that("Two-Expert MoE on Iris dataset:",
   {
     data(iris)
     iris$color <- with(iris, ifelse(Species == "setosa", "blue",

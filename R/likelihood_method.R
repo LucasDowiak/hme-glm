@@ -1,4 +1,4 @@
-#' Likelihood contribution for each expert
+#' Linear combination of the expert densities
 #'
 #' @param experts A character vector of expert node names
 #' 
@@ -21,7 +21,7 @@ weighted_densities <- function(experts, densities, weights)
 
 #' Likelihood value for the HME
 #'
-#' S3 method to calculate the likelihood of a fitted HME model object. The
+#' S3 method to calculate the log-likelihood of a fitted HME model object. The
 #' value comes from the fitted parameters of the model and not the vector of
 #' historical likelihood values saved from model optimization
 #'

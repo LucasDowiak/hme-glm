@@ -39,7 +39,7 @@ bootstrap_glm <- function(n=2, ...)
 #' 
 #' Optimize the parameters of the model given the posterior weights constructed
 #' during the E-Step. The E-step is summarized in the posterior weights that are
-#' passed during the function call. The M-stap utilizes the posterior weights
+#' passed during the function call. The M-step utilizes the posterior weights
 #' to update the parameters in the model. Using the updated parameter values,
 #' new values for the posterior weights, density estimates, and posterior
 #' weights are returned calculated and returned.
