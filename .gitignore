@@ -1,3 +1,6 @@
+# Specific R files
+iris_analysis.R
+
 # History files
 .Rhistory
 .Rapp.history
