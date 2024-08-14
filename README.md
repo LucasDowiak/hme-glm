@@ -57,11 +57,11 @@ model relating input row $\textbf{x}_t$ to output $y_t$:
 where $m$ is one of the $M$ component experts in the mixture. The experts are
 combined with associated weights into a mixture distribution:
 
-$$
+```math
 \begin{equation}
   P(y_{t} | \textbf{x}_{t}; \, \boldsymbol{\beta}) = \sum_{m=1}^{M} \Pi(m|t) P^{m}(y_{t} | \textbf{x}_{t}; \boldsymbol{\beta}^{m})
 \end{equation}
-$$
+```
 
 Here, $\Pi(m|t)$ is the probability that the input unit $t$ belongs to expert $m$
 and has the usual restrictions: $0 \leq \Pi(m|t) \leq 1$ for each $m$ and
@@ -70,11 +70,11 @@ uses to model $\Pi(m|t)$. It uses a set of "gates", structured as a tree, to
 recursively partition the input space and apply a set of local regression to the
 partitioned space. To do so, the gating network includes a second set of co-variates $\textbf{z}_{t}$ and parameter vector $\boldsymbol{\Omega}$:
 
-$$
+```math
 \begin{equation}
   P(y_{t} | \textbf{x}_{t}, \textbf{z}_{t}; \, \boldsymbol{\beta}, \boldsymbol{\Omega}) = \sum_{m=1}^{M} \Pi(m | \textbf{z}_{t}; \boldsymbol{\Omega}) P^{m}(y_{t} | \textbf{x}_{t}; \boldsymbol{\beta}^{m})
 \end{equation}
-$$
+```
 
 The graphic below demonstrates various ways to structure the gating network so that
 it results in four expert mixture. Gating nodes are recorded as circles while
