@@ -81,10 +81,11 @@ it results in four expert mixture. Gating nodes are recorded as circles while
 expert nodes are denoted by squares. The labels of each node are critical to running
 the model and are collectively passed to the argument `tree` as a character vector.
 
-![The gating architectures **A** and **B** are "symmetric" trees. While **A** uses
+![](./images/gating_architectures.png)
+
+The gating architectures **A** and **B** are "symmetric" trees. While **A** uses
 a single multinomial split to allocate inputs, architecture **B** uses a set of
 recursive binary splits. Architectures **C** and **D** are both asymmetric trees but
 differ in their application of asymmetry. Gating network **C** uses recursive binary
 splits that branch from the left side of the tree. Network **D** first uses a tertiary
-split at the first level and then a single binary split at the second level.](./images/gating_architectures.png)
-
+split at the first level and then a single binary split at the second level.
