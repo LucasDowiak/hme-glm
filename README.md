@@ -46,11 +46,13 @@ summary(mod)
 
 The HME is presented as a standard mixture model. For a given input and
 output pair $(x_t, y_t)$, each expert provides a probabilistic
-model relating input row $\textbf{x}_{t}$ to output $y_{t}$:
+model relating input row $\textbf{x}_t$ to output $y_t$:
 
-$$\begin{equation}
+```math
+\begin{equation}
   P^{m}_{t} \equiv P^{m}(y_{t}|\textbf{x}_{t}; \boldsymbol{\beta}^{m}), \quad m = 1,2,...,M
-\end{equation}$$
+\end{equation}
+```
 
 where $m$ is one of the $M$ component experts in the mixture. The experts are
 combined with associated weights into a mixture distribution:
