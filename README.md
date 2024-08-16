@@ -27,7 +27,7 @@ Invoking the model is simple and adheres to the R language's normal syntax. For 
 ```r
 library(hmeglm)
 data(iris)
-mod <- hme(tree=c("0", "0.1", "0.2"),                         # Set the architecture of the gating network
+mod <- hme(tree=c("0", "0.1", "0.2"),                         # Set tree architecture network
            formula="Sepal.Width ~ Petal.Width | Petal.Width", # Specify the regression
            data=iris,
            family=gaussian())
@@ -44,7 +44,7 @@ The HME is presented as a standard mixture model. For a given input and output p
 \end{equation}
 ```
 
-where $m$ is one of the $M$ component experts in the mixture. The experts are combined with associated weights into a mixture distribution:
+where $m$ is one of $M$ component experts in the mixture. The experts are combined with associated weights into a mixture distribution:
 
 ```math
 \begin{equation}
@@ -52,7 +52,7 @@ where $m$ is one of the $M$ component experts in the mixture. The experts are co
 \end{equation}
 ```
 
-Here, $\Pi(m|t)$ is the probability that the input unit $t$ belongs to expert $m$ and has the usual restrictions: $0 \leq \Pi(m|t) \leq 1$ for each $m$ and $\sum_{m} \Pi(m|t) = 1$. The novel aspect of the HME is the functional form it uses to model $\Pi(m|t)$. It uses a set of "gates", structured as a tree, to recursively partition the input space and apply a set of local regression to the partitioned space. To do so, the gating network includes a second set of co-variates $\textbf{z}_{t}$ and parameter vector $\boldsymbol{\Omega}$:
+Here, $\Pi(m|t)$ is the probability that the input unit $t$ belongs to expert $m$ and has the usual restrictions: $0 \leq \Pi(m|t) \leq 1$ for each $m$ and $\sum_{m} \Pi(m|t) = 1$. The novel aspect of the HME is the functional form it uses to model $\Pi(m|t)$. It uses a set of "gates", structured as a tree, to recursively partition the input space and apply a set of local regression to the partitioned space. To do so, the gating network includes a second set of co-variates, $\textbf{z}_{t}$, and parameter vector $\boldsymbol{\Omega}$:
 
 ```math
 \begin{equation}
