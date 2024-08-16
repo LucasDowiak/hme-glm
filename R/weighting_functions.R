@@ -66,18 +66,22 @@ par_to_gate_paths <- function(node, gate_par_list, X)
 #' 
 #' @importFrom stats dnorm
 #' 
-par_to_expert_dens <- function(expert, expert_type, expert_par_list, weights, Y, X, ...)
+par_to_expert_dens <- function(expert, family, expert_par_list, weights, Y, X, ...)
 {
-  if (expert_type == "gaussian") {
-    wts <- root_to_node_weight(expert, weights)
-    beta <- expert_par_list[[expert]]
-    mu <- X %*% beta
+  wts <- root_to_node_weight(expert, weights)
+  beta <- expert_par_list[[expert]]
+  mu <- family$linkinv(X %*% beta)
+  
+  if (family$family == "gaussian") {
     df.r <- length(Y) - length(beta)
     # deviance <- gaussian()$dev.resids(Y, mu, wt)
     variance <- sum(wts * (Y - mu)**2) / df.r
     return(dnorm(Y, mean=mu, sd=sqrt(variance), ...))
-  } else if (expert_type == "bernoulli") {
-    stop("Bernoulli not implemented")
+    
+  } else if (family$family == "poisson") {
+    return(dpois(Y, lambda=mu))
+  } else {
+    stop(sprintf("Family %s is not implemented", family$family))
   }
 }
 

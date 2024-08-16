@@ -74,17 +74,12 @@ hme <- function(tree, formula, data, family=gaussian(), holdout=NULL,
   }
   
   if (is(init_expert_pars, "NULL")) {
-    if (expert_type=="gaussian") {
-      expert.pars <- bootstrap_glm(length(expert.nodes),
-                                   formula=terms(form, data=mf, rhs=1),
-                                   data=data,
-                                   family=gaussian,
-                                   model=FALSE)
-      # expert.pars <- napply(expert.pars, function(x) c(x, log(var(Y))))
-      names(expert.pars) <- expert.nodes
-    } else {
-      expert.pars <- napply(expert.nodes, function(x) runif(ncol(X) , -2, 2))
-    }
+    expert.pars <- bootstrap_glm(length(expert.nodes),
+                                 formula=terms(form, data=mf, rhs=1),
+                                 data=data,
+                                 family=family,
+                                 model=FALSE)
+    names(expert.pars) <- expert.nodes
   } else {
     expert.pars <- init_expert_pars
   }
@@ -93,7 +88,7 @@ hme <- function(tree, formula, data, family=gaussian(), holdout=NULL,
   
   # Run E-step on initial parameter values 
   old_priors <- napply(gate.nodes, par_to_gate_paths, gate.pars, Z)
-  old_densities <- napply(expert.nodes, par_to_expert_dens, expert_type,
+  old_densities <- napply(expert.nodes, par_to_expert_dens, family,
                            expert.pars, old_priors, Y, X)
   old_posteriors <- napply(names(gate.pars), posterior_weights,
                             tree, old_priors, old_densities)
@@ -108,11 +103,11 @@ hme <- function(tree, formula, data, family=gaussian(), holdout=NULL,
   
   for (ii in seq_len(maxiter)) {
     oldLL <- newLL
-    mstep <- em_algo(tree, expert_type, old_posteriors,
+    mstep <- em_algo(tree, family, old_posteriors,
                      Y=Y, X=X, Z=Z, exp.pars=expert.pars, gat.pars=gate.pars)
     expert.pars <- mstep[["exp.pars"]]
     gate.pars <- mstep[["gat.pars"]]
-    newLL <- mstep[["loglik"]] / length(Y)
+    newLL <- mstep[["loglik"]]
     old_posteriors <- mstep$current_posteriors
     ewmaLL <- if (is.infinite(oldLL)) {
       newLL
@@ -141,7 +136,7 @@ hme <- function(tree, formula, data, family=gaussian(), holdout=NULL,
   
   # Create the full score vector of theta = (omega + beta)
   gate_scores <- napply(gate.nodes, logistic_score, mstep$current_priors, mstep$current_densities, Z)
-  expt_scores <- napply(expert.nodes, glm_score, expert.pars, gaussian(), mstep$current_priors,
+  expt_scores <- napply(expert.nodes, glm_score, expert.pars, family, mstep$current_priors,
                         mstep$current_densities, Y, X)
   scores <- do.call(cbind, c(unlist(gate_scores, recursive=FALSE), expt_scores))
   
